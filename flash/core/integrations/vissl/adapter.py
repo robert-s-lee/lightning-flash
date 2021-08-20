@@ -20,6 +20,9 @@ from flash.core.adapter import Adapter
 from flash.core.model import Task
 from flash.core.utilities.url_error import catch_url_error
 
+from classy_vision.losses import ClassyLoss
+from vissl.models.base_ssl_model import BaseSSLMultiInputOutputModel
+
 
 class VISSLAdapter(Adapter):
     """The ``VISSLAdapter`` is an :class:`~flash.core.adapter.Adapter` for integrating with VISSL."""
