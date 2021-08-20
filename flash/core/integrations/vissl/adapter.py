@@ -23,28 +23,45 @@ class VISSLAdapter(Adapter):
 
     required_extras: str = "image"
 
-    def __init__(self):
+    def __init__(self, vissl_model, vissl_loss):
         super().__init__()
 
-    def forward(self, x: Any) -> Any:
-        # TODO: Adapt VISSL BaseSSLMultiInputOutputModel to process input batch here
-        pass
+        self.vissl_model = vissl_model
+        self.vissl_loss = vissl_loss
+
+    def forward(self, batch) -> Any:
+        return self.vissl_model.forward(batch)
 
     def training_step(self, batch: Any, batch_idx: int) -> Any:
-        # TODO: Call to forward and then
-        # TODO: Call ClassyLoss on forward
+        vissl_input, target = batch
+        out = self(vissl_input)
+
+        # out can be torch.Tensor/List target is torch.Tensor
+        loss = self.vissl_loss(out, target)
+
+        # TODO: log
         # TODO: Include call to ClassyHooks during training
         pass
 
     def validation_step(self, batch: Any, batch_idx: int) -> None:
-        # TODO: Call to forward and then
-        # TODO: Call ClassyLoss on forward
+        vissl_input, target = batch
+        out = self(vissl_input)
+
+        # out can be torch.Tensor/List target is torch.Tensor
+        loss = self.vissl_loss(out, target)
+
+        # TODO: log
         # TODO: Include call to ClassyHooks during training
         pass
 
     def test_step(self, batch: Any, batch_idx: int) -> None:
-        # TODO: Call to forward and then
-        # TODO: Call ClassyLoss on forward
+        vissl_input, target = batch
+        out = self(vissl_input)
+
+        # out can be torch.Tensor/List target is torch.Tensor
+        loss = self.vissl_loss(out, target)
+
+        # TODO: log
         # TODO: Include call to ClassyHooks during training
         pass
 
