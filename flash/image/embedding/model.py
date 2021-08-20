@@ -19,10 +19,10 @@ from torch import nn
 from torch.nn import functional as F
 from torchmetrics import Metric
 
-from flash.core.adapter import Adapter, AdapterTask
-from flash.core.data.process import Preprocess
+from flash.core.adapter import AdapterTask
 from flash.core.registry import FlashRegistry
 from flash.core.utilities.imports import _IMAGE_AVAILABLE
+from flash.core.data.process import Preprocess
 
 if _IMAGE_AVAILABLE:
     from flash.image.classification.backbones import IMAGE_CLASSIFIER_BACKBONES
@@ -51,8 +51,6 @@ class ImageEmbedder(AdapterTask):
     """
 
     backbones: FlashRegistry = IMAGE_CLASSIFIER_BACKBONES
-
-    required_extras: str = "image"
 
     def __init__(
         self,
