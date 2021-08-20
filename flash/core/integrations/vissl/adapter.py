@@ -13,12 +13,12 @@
 # limitations under the License.
 from typing import Any, Callable, Optional
 
+from classy_vision.losses import ClassyLoss
+from vissl.models.base_ssl_model import BaseSSLMultiInputOutputModel
+
 from flash.core.adapter import Adapter
 from flash.core.model import Task
 from flash.core.utilities.url_error import catch_url_error
-
-from classy_vision.losses import ClassyLoss
-from vissl.models.base_ssl_model import BaseSSLMultiInputOutputModel
 
 
 class VISSLAdapter(Adapter):
