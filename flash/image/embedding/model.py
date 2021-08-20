@@ -19,7 +19,7 @@ from torch import nn
 from torch.nn import functional as F
 from torchmetrics import Metric
 
-from flash.core.adapter import AdapterTask
+from flash.core.adapter import Adapter, AdapterTask
 from flash.core.registry import FlashRegistry
 from flash.core.utilities.imports import _IMAGE_AVAILABLE
 from flash.core.data.process import Preprocess
@@ -52,8 +52,11 @@ class ImageEmbedder(AdapterTask):
 
     backbones: FlashRegistry = IMAGE_CLASSIFIER_BACKBONES
 
+    required_extras: str = "image"
+
     def __init__(
         self,
+        adapter: Adapter,
         embedding_dim: Optional[int] = None,
         backbone: str = "resnet50",
         pretrained: bool = True,
@@ -83,6 +86,7 @@ class ImageEmbedder(AdapterTask):
         #     rank_zero_warn("Adding linear layer on top of backbone. Remember to finetune first before using!")
 
         super().__init__(
+            adapter=adapter,
             model=None,
             loss_fn=loss_fn,
             optimizer=optimizer,
