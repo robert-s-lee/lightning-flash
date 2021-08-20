@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import functools
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from torch.utils.data import DataLoader, Sampler
 
@@ -63,7 +63,7 @@ class IceVisionAdapter(Adapter):
         head: str,
         pretrained: bool = True,
         metrics: Optional["IceVisionMetric"] = None,
-        image_size: Optional = None,
+        image_size: Optional[Tuple[int, int]] = None,
         **kwargs,
     ) -> Adapter:
         metadata = task.heads.get(head, with_metadata=True)
