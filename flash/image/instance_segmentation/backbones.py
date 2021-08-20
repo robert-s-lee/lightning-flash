@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from functools import partial
-from typing import Optional
+from typing import Optional, Tuple
 
 from flash.core.adapter import Adapter
 from flash.core.integrations.icevision.adapter import IceVisionAdapter, SimpleCOCOMetric
@@ -44,7 +44,7 @@ class IceVisionInstanceSegmentationAdapter(IceVisionAdapter):
         head: str = "mask_rcnn",
         pretrained: bool = True,
         metrics: Optional["IceVisionMetric"] = None,
-        image_size: Optional = None,
+        image_size: Optional[Tuple[int, int]] = None,
         **kwargs,
     ) -> Adapter:
         return super().from_task(

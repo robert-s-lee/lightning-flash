@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from functools import partial
-from typing import Optional
+from typing import Optional, Tuple
 
 import torch
 
@@ -47,7 +47,7 @@ class IceVisionObjectDetectionAdapter(IceVisionAdapter):
         head: str = "retinanet",
         pretrained: bool = True,
         metrics: Optional["IceVisionMetric"] = None,
-        image_size: Optional = None,
+        image_size: Optional[Tuple[int, int]] = None,
         **kwargs,
     ) -> Adapter:
         return super().from_task(
