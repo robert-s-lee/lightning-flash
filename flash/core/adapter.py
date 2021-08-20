@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from abc import abstractmethod
-from typing import Any, Callable, Optional, Dict
+from typing import Any, Callable, Dict, Optional
 
 from torch import nn
 from torch.utils.data import DataLoader, Sampler
 
 import flash
 from flash.core.data.auto_dataset import BaseAutoDataset
-from flash.core.model import DatasetProcessor, ModuleWrapperBase, Task, Preprocess
+from flash.core.model import DatasetProcessor, ModuleWrapperBase, Preprocess, Task
 
 
 class Adapter(DatasetProcessor, ModuleWrapperBase, nn.Module):
