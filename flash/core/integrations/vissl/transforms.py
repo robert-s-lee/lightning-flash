@@ -14,14 +14,16 @@
 from typing import Any, Callable, Dict, Tuple
 
 from torch import nn
+from flash.core.adapter import AdapterTransform
 
 
-# TODO: create an abstract TransformAdapter class for both vissl and icevision
-class VISSLTransformAdapter(nn.Module):
-    def __init__(self, transform):
-        super().__init__()
+class VISSLTransformAdapter(AdapterTransform):
+    def __init__(self, train_transform, val_transform, test_transform):
+        super().__init__(train_transform, val_transform, test_transform)
 
-        self.transform = transform
+        self.train_transform = train_transform
+        self.val_transform = val_transform
+        self.test_transform = test_transform
 
     def forward(self, batch):
-        return self.transform(batch)
+        return self.train_transform(batch)

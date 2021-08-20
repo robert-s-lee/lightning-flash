@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from abc import abstractmethod
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, Dict
 
 from torch import nn
 from torch.utils.data import DataLoader, Sampler
 
 import flash
 from flash.core.data.auto_dataset import BaseAutoDataset
-from flash.core.model import DatasetProcessor, ModuleWrapperBase, Task
+from flash.core.model import DatasetProcessor, ModuleWrapperBase, Task, Preprocess
 
 
 class Adapter(DatasetProcessor, ModuleWrapperBase, nn.Module):
@@ -160,3 +160,20 @@ class AdapterTask(Task):
         return self.adapter.process_predict_dataset(
             dataset, batch_size, num_workers, pin_memory, collate_fn, shuffle, drop_last, sampler
         )
+
+
+class AdapterTransform(Preprocess):
+    def __init__(
+        self,
+        train_transform: Optional[Dict[str, Callable]],
+        val_transform: Optional[Dict[str, Callable]],
+        test_transform: Optional[Dict[str, Callable]],
+    ):
+        super().__init__(
+            train_transform=train_transform,
+            val_transform=val_transform,
+            test_transform=test_transform,
+        )
+
+    def default_transforms(self) -> Optional[Dict[str, Callable]]:
+        pass
