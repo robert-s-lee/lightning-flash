@@ -14,6 +14,7 @@
 from typing import Any, Callable, Dict, Tuple
 
 from torch import nn
+
 from flash.core.adapter import AdapterTransform
 
 

@@ -15,8 +15,8 @@ from typing import Any, Callable, Optional
 
 from flash.core.adapter import Adapter
 from flash.core.model import Task
-from flash.core.utilities.url_error import catch_url_error
 from flash.core.utilities.imports import _VISSL_AVAILABLE
+from flash.core.utilities.url_error import catch_url_error
 
 if _VISSL_AVAILABLE:
     from classy_vision.losses import build_loss, ClassyLoss
