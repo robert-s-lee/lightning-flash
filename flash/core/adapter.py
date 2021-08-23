@@ -177,3 +177,6 @@ class AdapterTransform(Preprocess):
 
     def default_transforms(self) -> Optional[Dict[str, Callable]]:
         pass
+
+    def forward(self, x: Any) -> Any:
+        pass
