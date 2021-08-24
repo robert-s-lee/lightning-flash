@@ -73,3 +73,9 @@ class VISSLAdapter(Adapter):
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         # TODO: return embedding here
         pass
+
+
+
+class MockVISSLTask:
+    def __init__(self, loss) -> None:
+        pass
