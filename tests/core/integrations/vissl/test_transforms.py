@@ -24,6 +24,7 @@ if _TORCHVISION_AVAILABLE:
 
 if _VISSL_AVAILABLE:
     from classy_vision.dataset.transforms import TRANSFORM_REGISTRY
+
     from flash.core.integrations.vissl.transforms import vissl_collate_fn
 
 
