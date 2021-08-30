@@ -15,8 +15,8 @@ from typing import Any, Callable, Optional
 
 from flash.core.adapter import Adapter
 from flash.core.model import Task
-from flash.core.utilities.url_error import catch_url_error
 from flash.core.utilities.imports import _VISSL_AVAILABLE
+from flash.core.utilities.url_error import catch_url_error
 
 if _VISSL_AVAILABLE:
     from classy_vision.losses import build_loss, ClassyLoss
@@ -73,9 +73,12 @@ class VISSLAdapter(Adapter):
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         # TODO: return embedding here
         pass
+<<<<<<< HEAD
 
 
 
 class MockVISSLTask:
     def __init__(self, loss) -> None:
         pass
+=======
+>>>>>>> b2788038e0f924f6c905c892aa9200ccc0cd977e
