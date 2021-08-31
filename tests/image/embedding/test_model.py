@@ -16,12 +16,11 @@ import re
 
 import pytest
 import torch
+
 import flash
 from flash import image
-
+from flash.core.utilities.imports import _IMAGE_AVAILABLE, _TORCHVISION_AVAILABLE, _VISSL_AVAILABLE
 from flash.image import ImageEmbedder
-from flash.core.utilities.imports import _IMAGE_AVAILABLE, _VISSL_AVAILABLE, _TORCHVISION_AVAILABLE
-
 from tests.helpers.utils import _IMAGE_TESTING
 from tests.image.embedding.utils import ssl_train_loader
 
@@ -53,7 +52,7 @@ def test_load_from_checkpoint_dependency_error():
 @pytest.mark.skipif(not (_TORCHVISION_AVAILABLE and _VISSL_AVAILABLE), reason="vissl not installed.")
 def test_dino_training(tmpdir):
     train_dataloader = ssl_train_loader()
-    embedder = ImageEmbedder(backbone="resnet50", loss_fn='dino_loss', heads='swav_head')
+    embedder = ImageEmbedder(backbone="resnet50", loss_fn="dino_loss", heads="swav_head")
 
     trainer = flash.Trainer(max_steps=3, gpus=torch.cuda.device_count())
     trainer.fit(embedder, train_dataloader=train_dataloader)

@@ -100,7 +100,6 @@ class VISSLAdapter(Adapter):
         pass
 
 
-
 class MockVISSLTask:
     def __init__(self, loss) -> None:
         pass

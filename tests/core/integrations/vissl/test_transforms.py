@@ -15,7 +15,6 @@ import pytest
 
 from flash.core.data.data_source import DefaultDataKeys
 from flash.core.utilities.imports import _TORCHVISION_AVAILABLE, _VISSL_AVAILABLE
-
 from tests.image.embedding.utils import ssl_train_loader
 
 

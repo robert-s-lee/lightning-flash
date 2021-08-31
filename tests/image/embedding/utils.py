@@ -1,15 +1,15 @@
-from flash.image import ImageClassificationData
-
 from flash.core.data.data_source import DefaultDataKeys
 from flash.core.data.process import DefaultPreprocess
 from flash.core.data.transforms import ApplyToKeys
-from flash.core.utilities.imports import _VISSL_AVAILABLE, _TORCHVISION_AVAILABLE
+from flash.core.utilities.imports import _TORCHVISION_AVAILABLE, _VISSL_AVAILABLE
+from flash.image import ImageClassificationData
 
 if _TORCHVISION_AVAILABLE:
     from torchvision.datasets import FakeData
 
 if _VISSL_AVAILABLE:
     from classy_vision.dataset.transforms import TRANSFORM_REGISTRY
+
     from flash.core.integrations.vissl.transforms import vissl_collate_fn
 
 
