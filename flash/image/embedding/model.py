@@ -30,7 +30,7 @@ else:
     IMAGE_CLASSIFIER_BACKBONES = FlashRegistry("backbones")
 
 if _VISSL_AVAILABLE:
-    from flash.image.embedding.loss import IMAGE_EMBEDDER_LOSS_FUNTIONS
+    from flash.image.embedding.losses import IMAGE_EMBEDDER_LOSS_FUNTIONS
 else:
     IMAGE_EMBEDDER_LOSS_FUNTIONS = FlashRegistry("loss_functions")
 

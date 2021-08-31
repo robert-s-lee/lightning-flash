@@ -11,3 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import List
+from flash.core.utilities.imports import _VISSL_AVAILABLE
+
+if _VISSL_AVAILABLE:
+    from classy_vision.hooks.classy_hook import ClassyHook
+
+
+class AdaptVISSLHooks:
+    def __init__(self, hooks: List[ClassyHook]) -> None:
+        self.hooks = hooks
