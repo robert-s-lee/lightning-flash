@@ -22,12 +22,17 @@ from torchmetrics import Metric
 from flash.core.adapter import Adapter, AdapterTask
 from flash.core.data.process import Preprocess
 from flash.core.registry import FlashRegistry
-from flash.core.utilities.imports import _IMAGE_AVAILABLE
+from flash.core.utilities.imports import _IMAGE_AVAILABLE, _VISSL_AVAILABLE
 
 if _IMAGE_AVAILABLE:
     from flash.image.classification.backbones import IMAGE_CLASSIFIER_BACKBONES
 else:
     IMAGE_CLASSIFIER_BACKBONES = FlashRegistry("backbones")
+
+if _VISSL_AVAILABLE:
+    from flash.image.embedding.loss import IMAGE_EMBEDDER_LOSS_FUNTIONS
+else:
+    IMAGE_EMBEDDER_LOSS_FUNTIONS = FlashRegistry("loss_functions")
 
 
 class ImageEmbedder(AdapterTask):
@@ -35,13 +40,13 @@ class ImageEmbedder(AdapterTask):
     more details, see :ref:`image_embedder`.
 
     Args:
+        loss_fn: Loss function for training and validating ImageEmbedder backbone
         embedding_dim: Dimension of the embedded vector. ``None`` uses the default from the backbone. Default value
             or setting it to ``None`` ignores the heads args.
         backbone: A model to use to extract image features, defaults to ``"swav-imagenet"``.
         pretrained: Use a pretrained backbone, defaults to ``True``.
         heads: A list of heads to be applied to the backbones for training, validation, test or predict. Defaults
             to ``None``.
-        loss_fn: Loss function for training and finetuning, defaults to :func:`torch.nn.functional.cross_entropy`
         optimizer: Optimizer to use for training and finetuning, defaults to :class:`torch.optim.SGD`.
         metrics: Metrics to compute for training and evaluation. Can either be an metric from the `torchmetrics`
             package, a custom metric inherenting from `torchmetrics.Metric`, a callable function or a list/dict
@@ -51,43 +56,42 @@ class ImageEmbedder(AdapterTask):
     """
 
     backbones: FlashRegistry = IMAGE_CLASSIFIER_BACKBONES
+    loss_fns: FlashRegistry = IMAGE_EMBEDDER_LOSS_FUNTIONS
 
     required_extras: str = "image"
 
     def __init__(
         self,
-        adapter: Adapter,
+        loss_fn: str,
         embedding_dim: Optional[int] = None,
         backbone: str = "resnet50",
         pretrained: bool = True,
         heads: Optional[Union[nn.Module, nn.ModuleList]] = None,
-        loss_fn: Callable = F.cross_entropy,
         optimizer: Type[torch.optim.Optimizer] = torch.optim.SGD,
         metrics: Optional[Union[Metric, Callable, Mapping, Sequence]] = None,
         learning_rate: float = 1e-3,
         preprocess: Optional[Preprocess] = None,
+        **kwargs: Any,
     ):
         self.save_hyperparameters()
 
-        self.backbone_name = backbone
-        self.embedding_dim = embedding_dim
-        self.heads = heads
-
         self.backbone, num_features = self.backbones.get(backbone)(pretrained=pretrained)
 
-        # TODO: figure out how embedding_dim and head or a list of heads will interact
-        # if embedding_dim is None:
-        #     self.head = nn.Identity()
-        # else:
-        #     self.head = nn.Sequential(
-        #         nn.Flatten(),
-        #         nn.Linear(num_features, embedding_dim),
-        #     )
-        #     rank_zero_warn("Adding linear layer on top of backbone. Remember to finetune first before using!")
+        # TODO: add linear layer to backbone to get num_feature -> embedding_dim before applying heads
+        assert embedding_dim == num_features
+
+        metadata = self.loss_fns.get(loss_fn, with_metadata=True)
+        adapter = metadata["metadata"]["adapter"].from_task(
+            self,
+            loss_fn=loss_fn,
+            backbone=backbone,
+            embedding_dim=embedding_dim,
+            heads=heads,
+            **kwargs,
+        )
 
         super().__init__(
             adapter=adapter,
-            model=None,
             loss_fn=loss_fn,
             optimizer=optimizer,
             metrics=metrics,

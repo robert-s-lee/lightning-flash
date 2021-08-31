@@ -34,6 +34,31 @@ class VISSLAdapter(Adapter):
         self.vissl_model = vissl_model
         self.vissl_loss = vissl_loss
 
+    @classmethod
+    @catch_url_error
+    def from_task(
+        cls,
+        task: Task,
+        num_classes: int,
+        backbone: str,
+        head: str,
+        pretrained: bool = True,
+        metrics: Optional["IceVisionMetric"] = None,
+        image_size: Optional[Tuple[int, int]] = None,
+        **kwargs,
+    ) -> Adapter:
+        metadata = task.heads.get(head, with_metadata=True)
+        backbones = metadata["metadata"]["backbones"]
+        backbone_config = backbones.get(backbone)(pretrained)
+        model_type, model, icevision_adapter, backbone = metadata["fn"](
+            backbone_config,
+            num_classes,
+            image_size=image_size,
+            **kwargs,
+        )
+        icevision_adapter = icevision_adapter(model=model, metrics=metrics)
+        return cls(model_type, model, icevision_adapter, backbone)
+
     def forward(self, batch) -> Any:
         return self.vissl_model.forward(batch)
 
@@ -73,12 +98,9 @@ class VISSLAdapter(Adapter):
     def predict_step(self, batch: Any, batch_idx: int, dataloader_idx: int = 0) -> Any:
         # TODO: return embedding here
         pass
-<<<<<<< HEAD
 
 
 
 class MockVISSLTask:
     def __init__(self, loss) -> None:
         pass
-=======
->>>>>>> b2788038e0f924f6c905c892aa9200ccc0cd977e
