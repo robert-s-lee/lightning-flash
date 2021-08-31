@@ -14,8 +14,8 @@
 from typing import List
 
 from flash.core.integrations.vissl.adapter import VISSLAdapter
-from flash.core.utilities.imports import _VISSL_AVAILABLE
 from flash.core.registry import FlashRegistry
+from flash.core.utilities.imports import _VISSL_AVAILABLE
 
 if _VISSL_AVAILABLE:
     from classy_vision.losses import ClassyLoss, LOSS_REGISTRY
@@ -43,7 +43,7 @@ def dino_loss(
         "ema_center": ema_center,
         "normalize_last_layer": normalize_last_layer,
     }
-    loss_fn = LOSS_REGISTRY['dino_loss'](cfg)
+    loss_fn = LOSS_REGISTRY["dino_loss"](cfg)
     return loss_fn
 
 
