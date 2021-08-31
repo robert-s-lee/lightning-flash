@@ -25,9 +25,9 @@ def dino_loss(
     num_crops: int,
     momentum: float = 0.996,
     student_temp: float = 0.1,
-    teacher_temp_min:float = 0.04,
-    teacher_temp_max:float = 0.07,
-    teacher_temp_warmup_iters: int = 37530, # convert this to 30 epochs
+    teacher_temp_min: float = 0.04,
+    teacher_temp_max: float = 0.07,
+    teacher_temp_warmup_iters: int = 37530,  # convert this to 30 epochs
     crops_for_teacher: List[int] = [0, 1],
     ema_center: float = 0.9,
     normalize_last_layer: bool = False,
