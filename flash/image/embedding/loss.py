@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from flash.core.integrations.vissl.adapter import VISSLAdapter
-from flash.core.utilities.imports import _VISSL_AVAILABLE
 from flash.core.registry import FlashRegistry
+from flash.core.utilities.imports import _VISSL_AVAILABLE
 
 if _VISSL_AVAILABLE:
     from classy_vision.losses import ClassyLoss, LOSS_REGISTRY
@@ -25,7 +25,7 @@ def dino_loss(
     student_temp=0.1,
     teacher_temp_min=0.04,
     teacher_temp_max=0.07,
-    teacher_temp_warmup_iters=37530, # convert this to 30 epochs
+    teacher_temp_warmup_iters=37530,  # convert this to 30 epochs
     crops_for_teacher=[0, 1],
     ema_center=0.9,
     normalize_last_layer=False,
@@ -41,10 +41,10 @@ def dino_loss(
         "ema_center": ema_center,
         "normalize_last_layer": normalize_last_layer,
     }
-    loss_fn = LOSS_REGISTRY['dino_loss'](cfg)
+    loss_fn = LOSS_REGISTRY["dino_loss"](cfg)
     return loss_fn
 
 
 def register_vissl_losses(register: FlashRegistry):
-    for loss_fn in (dino_loss):
+    for loss_fn in dino_loss:
         register(loss_fn, adapter=VISSLAdapter)
