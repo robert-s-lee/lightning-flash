@@ -21,9 +21,10 @@ from flash.core.utilities.url_error import catch_url_error
 if _VISSL_AVAILABLE:
     from classy_vision.losses import build_loss, ClassyLoss
     from vissl.models.base_ssl_model import BaseSSLMultiInputOutputModel
+    from flash.core.integrations.vissl.hooks import AdaptVISSLHooks
 
 
-class VISSLAdapter(Adapter):
+class VISSLAdapter(Adapter, AdaptVISSLHooks):
     """The ``VISSLAdapter`` is an :class:`~flash.core.adapter.Adapter` for integrating with VISSL."""
 
     required_extras: str = "image"
@@ -65,6 +66,10 @@ class VISSLAdapter(Adapter):
     def training_step(self, batch: Any, batch_idx: int) -> Any:
         vissl_input, target = batch
         out = self(vissl_input)
+
+        # call forward hook from VISSL (momentum updates)
+        for hook in self.hooks:
+            hook.on_forward()
 
         # out can be torch.Tensor/List target is torch.Tensor
         loss = self.vissl_loss(out, target)

@@ -12,12 +12,45 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from typing import List
+
+from pytorch_lightning.core.hooks import ModelHooks
 from flash.core.utilities.imports import _VISSL_AVAILABLE
 
 if _VISSL_AVAILABLE:
     from classy_vision.hooks.classy_hook import ClassyHook
 
 
-class AdaptVISSLHooks:
+class AdaptVISSLHooks(ModelHooks):
     def __init__(self, hooks: List[ClassyHook]) -> None:
+        super().__init__()
+
         self.hooks = hooks
+
+    def on_train_start(self) -> None:
+        for hook in self.hooks:
+            hook.on_start()
+
+    def on_train_end(self) -> None:
+        for hook in self.hooks:
+            hook.on_end()
+
+    def on_train_epoch_start(self) -> None:
+        for hook in self.hooks:
+            hook.on_phase_start()
+
+    def on_train_epoch_end(self) -> None:
+        for hook in self.hooks:
+            hook.on_update()
+            hook.on_phase_end()
+
+    def on_train_batch_end(self, outputs, batch, batch_idx, dataloader_idx) -> None:
+        for hook in self.hooks:
+            hook.on_step()
+
+    def on_after_backward(self) -> None:
+        for hook in self.hooks:
+            hook.on_backward()
+
+    def on_before_zero_grad(self, optimizer) -> None:
+        for hook in self.hooks:
+            hook.on_loss_and_meter()
