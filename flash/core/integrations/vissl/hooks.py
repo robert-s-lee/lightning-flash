@@ -14,6 +14,7 @@
 from typing import List
 
 from pytorch_lightning.core.hooks import ModelHooks
+
 from flash.core.utilities.imports import _VISSL_AVAILABLE
 
 if _VISSL_AVAILABLE:

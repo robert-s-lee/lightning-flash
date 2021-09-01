@@ -21,6 +21,7 @@ from flash.core.utilities.url_error import catch_url_error
 if _VISSL_AVAILABLE:
     from classy_vision.losses import build_loss, ClassyLoss
     from vissl.models.base_ssl_model import BaseSSLMultiInputOutputModel
+
     from flash.core.integrations.vissl.hooks import AdaptVISSLHooks
 
 
