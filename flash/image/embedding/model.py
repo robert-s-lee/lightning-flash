@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import flash
 from typing import Any, Callable, Mapping, Optional, Sequence, Type, Union
 
 import torch
@@ -24,15 +25,14 @@ from flash.core.data.process import Preprocess
 from flash.core.registry import FlashRegistry
 from flash.core.utilities.imports import _IMAGE_AVAILABLE, _VISSL_AVAILABLE
 
-if _IMAGE_AVAILABLE:
-    from flash.image.classification.backbones import IMAGE_CLASSIFIER_BACKBONES
+if _VISSL_AVAILABLE and _IMAGE_AVAILABLE:
+    from flash.image.embedding.backbones import IMAGE_CLASSIFIER_BACKBONES
+    from flash.image.embedding.losses import IMAGE_EMBEDDER_LOSS_FUNTIONS
+    from flash.image.embedding.heads import IMAGE_EMBEDDER_HEADS
 else:
     IMAGE_CLASSIFIER_BACKBONES = FlashRegistry("backbones")
-
-if _VISSL_AVAILABLE:
-    from flash.image.embedding.losses import IMAGE_EMBEDDER_LOSS_FUNTIONS
-else:
     IMAGE_EMBEDDER_LOSS_FUNTIONS = FlashRegistry("loss_functions")
+    IMAGE_EMBEDDER_HEADS = FlashRegistry("embedder_heads")
 
 
 class ImageEmbedder(AdapterTask):
@@ -57,6 +57,7 @@ class ImageEmbedder(AdapterTask):
 
     backbones: FlashRegistry = IMAGE_CLASSIFIER_BACKBONES
     loss_fns: FlashRegistry = IMAGE_EMBEDDER_LOSS_FUNTIONS
+    heads: FlashRegistry = IMAGE_EMBEDDER_HEADS
 
     required_extras: str = "image"
 
@@ -70,17 +71,19 @@ class ImageEmbedder(AdapterTask):
         optimizer: Type[torch.optim.Optimizer] = torch.optim.SGD,
         metrics: Optional[Union[Metric, Callable, Mapping, Sequence]] = None,
         learning_rate: float = 1e-3,
-        preprocess: Optional[Preprocess] = None,
         **kwargs: Any,
     ):
         self.save_hyperparameters()
 
         self.backbone, num_features = self.backbones.get(backbone)(pretrained=pretrained)
 
+        # get backbones and heads
+
         # TODO: add linear layer to backbone to get num_feature -> embedding_dim before applying heads
         assert embedding_dim == num_features
 
         metadata = self.loss_fns.get(loss_fn, with_metadata=True)
+        # get hooks, pass hook to adapter
         adapter = metadata["metadata"]["adapter"].from_task(
             self,
             loss_fn=loss_fn,
@@ -96,5 +99,4 @@ class ImageEmbedder(AdapterTask):
             optimizer=optimizer,
             metrics=metrics,
             learning_rate=learning_rate,
-            preprocess=preprocess,
         )

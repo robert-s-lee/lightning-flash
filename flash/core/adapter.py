@@ -160,23 +160,3 @@ class AdapterTask(Task):
         return self.adapter.process_predict_dataset(
             dataset, batch_size, num_workers, pin_memory, collate_fn, shuffle, drop_last, sampler
         )
-
-
-class AdapterTransform(Preprocess):
-    def __init__(
-        self,
-        train_transform: Optional[Dict[str, Callable]],
-        val_transform: Optional[Dict[str, Callable]],
-        test_transform: Optional[Dict[str, Callable]],
-    ):
-        super().__init__(
-            train_transform=train_transform,
-            val_transform=val_transform,
-            test_transform=test_transform,
-        )
-
-    def default_transforms(self) -> Optional[Dict[str, Callable]]:
-        pass
-
-    def forward(self, x: Any) -> Any:
-        pass

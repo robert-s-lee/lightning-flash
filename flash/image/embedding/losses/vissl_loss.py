@@ -19,6 +19,7 @@ from flash.core.utilities.imports import _VISSL_AVAILABLE
 
 if _VISSL_AVAILABLE:
     from classy_vision.losses import ClassyLoss, LOSS_REGISTRY
+    from vissl.hooks.dino_hooks import DINOHook
 
 
 def dino_loss(
@@ -43,11 +44,11 @@ def dino_loss(
         "ema_center": ema_center,
         "normalize_last_layer": normalize_last_layer,
     }
-    loss_fn = LOSS_REGISTRY["dino_loss"](cfg)
+    loss_fn = LOSS_REGISTRY["dino_loss"](**cfg)
     return loss_fn
 
 
 def register_vissl_losses(register: FlashRegistry):
     # for loss_fn in (dino_loss):
     #     register(loss_fn, adapter=VISSLAdapter)
-    register(dino_loss, adapter=VISSLAdapter)
+    register(dino_loss, adapter=VISSLAdapter, hooks=[DINOHook])

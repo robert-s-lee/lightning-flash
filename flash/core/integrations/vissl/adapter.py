@@ -30,6 +30,7 @@ class VISSLAdapter(Adapter, AdaptVISSLHooks):
     required_extras: str = "image"
 
     def __init__(self, vissl_model: BaseSSLMultiInputOutputModel, vissl_loss: ClassyLoss):
+        # TODO: take in hooks and pass to super so that it can call it
         super().__init__()
 
         self.vissl_model = vissl_model
