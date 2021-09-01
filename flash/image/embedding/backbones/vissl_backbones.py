@@ -33,27 +33,33 @@ def vision_transformer_trunk(
     drop_path_rate: float = 0,
     qkv_bias: bool = False,
     qk_scale: bool = False,
-    classifier: str = 'token',
+    classifier: str = "token",
 ) -> nn.Module:
 
-    cfg = AttrDict({
-        "TRUNK": AttrDict({
-            "VISION_TRANSFORMERS": AttrDict({
-                "image_size": image_size,
-                "patch_size": patch_size,
-                "hidden_dim": hidden_dim,
-                "num_layers": num_layers,
-                "num_heads": num_heads,
-                "mlp_dim": mlp_dim,
-                "dropout_rate": dropout_rate,
-                "attention_dropout_rate": attention_dropout_rate,
-                "drop_path_rate": drop_path_rate,
-                "qkv_bias": qkv_bias,
-                "qk_scale": qk_scale,
-                "classifier": classifier,
-            })
-        })
-    })
+    cfg = AttrDict(
+        {
+            "TRUNK": AttrDict(
+                {
+                    "VISION_TRANSFORMERS": AttrDict(
+                        {
+                            "image_size": image_size,
+                            "patch_size": patch_size,
+                            "hidden_dim": hidden_dim,
+                            "num_layers": num_layers,
+                            "num_heads": num_heads,
+                            "mlp_dim": mlp_dim,
+                            "dropout_rate": dropout_rate,
+                            "attention_dropout_rate": attention_dropout_rate,
+                            "drop_path_rate": drop_path_rate,
+                            "qkv_bias": qkv_bias,
+                            "qk_scale": qk_scale,
+                            "classifier": classifier,
+                        }
+                    )
+                }
+            )
+        }
+    )
 
     trunk = MODEL_TRUNKS_REGISTRY["vision_transformer"](**cfg)
     return trunk
